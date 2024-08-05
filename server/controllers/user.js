@@ -3,6 +3,8 @@ const { prisma } = require("../prismaClient")
 const express = require("express")
 const jwt = require("jsonwebtoken")
 
+require("dotenv").config()
+
 /**
  * @param {import('express').Request} req
  * @param {import('express').Response} res
@@ -60,19 +62,31 @@ const login = async (req, res, next) => {
         const verifyPass = await bcrypt.compare(password, findUser.password)
 
         if (verifyPass) {
-            const token = jwt.sign()
+            const token = jwt.sign(findUser, process.env.JWT_SECRET)
+            res.cookie("jwt", token, {
+                maxAge: 2 * 60 * 60 * 1000
+            })
+            res.status(200).json({
+                message: "successfully logged in ",
+                token: token
+            })
         }
-
-
+        else {
+            res.status(403).json({
+                message: "incorrect username or password"
+            })
+        }
 
 
     }
     catch (err) {
+        next(err)
 
     }
 }
 
 
 module.exports = {
-    signUp
+    signUp,
+    login
 }
