@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken")
 const { AppError } = require("../error/AppError")
 const { transportMail } = require("../nodemailer/mail")
 const { mailContent } = require("../nodemailer/mailContent")
-
 require("dotenv").config()
 
 /**
@@ -38,9 +37,11 @@ const signUp = async (req, res, next) => {
 
         })
 
+        const mailOptions = await mailContent(createuser)
 
 
-        transportMail.sendMail(mailContent, (err, info) => {
+
+        transportMail.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err)
             }
