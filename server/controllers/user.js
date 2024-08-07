@@ -2,6 +2,9 @@ const bcrypt = require("bcrypt")
 const { prisma } = require("../prismaClient")
 const express = require("express")
 const jwt = require("jsonwebtoken")
+const { AppError } = require("../error/AppError")
+const { transportMail } = require("../nodemailer/mail")
+const { mailContent } = require("../nodemailer/mailContent")
 
 require("dotenv").config()
 
@@ -13,7 +16,15 @@ require("dotenv").config()
 const signUp = async (req, res, next) => {
     try {
         const { username, password, email } = req.body
-        // console.log(username, password, email)
+
+        const findUser = await prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
+        if (findUser) {
+            return next(new AppError(409, "User already exists"))
+        }
 
         const hashPass = await bcrypt.hash(password, 12)
 
@@ -25,6 +36,15 @@ const signUp = async (req, res, next) => {
                 password: hashPass.toString()
             }
 
+        })
+
+
+
+        transportMail.sendMail(mailContent, (err, info) => {
+            if (err) {
+                console.log(err)
+            }
+            console.log(info.messageId)
         })
 
         res.status(200).json({
