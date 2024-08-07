@@ -8,13 +8,17 @@ require("dotenv").config()
  * @param {import('express').NextFunction} next
  */
 
-const protectedRoute = async (req, res) => {
+const protectedRoute = async (req, res, next) => {
     const token = req.cookies.jwt
+    const user = jwt.verify(token, process.env.JWT_SECRET)
     if (!token) {
         return res.status(403).json({
             message: "first login"
         })
     }
+    req.user = user
+
+    next()
 }
 
 module.exports = {

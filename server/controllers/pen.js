@@ -6,32 +6,20 @@ require("dotenv").config()
  * @param {import('express').Response} res
  * @param {import('express').NextFunction} next
  */
-const createPen = async (req, res) => {
+const createPen = async (req, res, next) => {
     try {
         const { html, css, js } = req.body
-        const token = req.cookies.jwt
-        const currUser = jwt.verify(token, process.env.JWT_SECRET)
+        const currUser = req.user
+        console.log(currUser)
         const newPen = await prisma.pen.create({
             data: {
                 html,
                 css,
-                js
+                js,
+                userId: currUser.id
             }
         })
-        if (newPen) {
-            await prisma.user.update({
-                where: {
-                    id: currUser.id
-                },
-                data: {
-                    pens: {
-                        connect: {
-                            userId: newPen.id
-                        }
-                    }
-                }
-            })
-        }
+
         res.status(201).json({
             message: "pen saved",
             data: newPen
@@ -43,7 +31,136 @@ const createPen = async (req, res) => {
     }
 
 }
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+
+const getAllPens = async (req, res, next) => {
+    try {
+        const currUser = req.user
+        const allPens = await prisma.pen.findMany({
+            where: {
+                userId: currUser.id
+
+            }
+        })
+
+        res.status(200).json({
+            message: "all pens",
+            data: allPens
+        })
+
+
+    }
+    catch (err) {
+        next(err)
+
+    }
+}
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+const deletePen = async (req, res, next) => {
+    try {
+        const { id: penId } = req.params
+        const deletedPen = await prisma.pen.delete({
+            where: {
+                id: penId
+
+            }
+        })
+        res.status(200).json({
+            message: "pen deleted",
+            data: deletedPen
+        })
+
+    } catch (error) {
+        next(error)
+
+    }
+}
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+
+const getOnePen = async (req, res, next) => {
+    try {
+        const currUser = req.user
+        const { id: penId } = req.params
+        const findOnePen = await prisma.user.findFirst({
+            where: {
+                id: currUser.id
+
+
+            },
+            select: {
+                pens: {
+                    where: {
+                        id: penId
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            message: "Hello",
+            pen: findOnePen
+        })
+
+    }
+    catch (error) {
+        next(error)
+
+    }
+}
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+
+const updateOnePen = async (req, res, next) => {
+    try {
+        const { id: penId } = req.params
+        const { html, css, js } = req.body
+
+        const updatedItem = await prisma.pen.update({
+            where: {
+                id: penId
+            },
+            data: {
+                html,
+                css,
+                js
+
+            }
+        })
+        res.status(200).json({
+            message: "updated pen",
+            data: updatedItem
+        })
+
+    } catch (error) {
+        next(error)
+
+    }
+
+}
+
+
 
 module.exports = {
-    createPen
+    createPen,
+    getAllPens,
+    deletePen,
+    getOnePen,
+    updateOnePen
 }

@@ -12,7 +12,8 @@ const port = process.env.PORT || 3000
 
 app.use(cookieParser())
 app.use(express.json())
-app.use("/api/v1", userRouter, penRouter)
+app.use("/api/v1", userRouter)
+app.use("/api/v1", penRouter)
 
 
 app.use((err, req, res, next) => {
