@@ -1,5 +1,5 @@
-import LoginPage from "../components/LoginPage";
-import Wrapper from "../components/Wrapper";
+import LoginPage from "../components/Auth/LoginPage";
+import Wrapper from "../components/Home/Wrapper";
 
 export default function Login() {
     return (

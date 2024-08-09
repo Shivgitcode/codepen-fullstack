@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { codepen } from "../assets";
+import { codepen } from "../../assets";
 import { IoMdHome } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 

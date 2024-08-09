@@ -1,5 +1,5 @@
-import Dashboard from "../components/Dashboard";
-import Wrapper from "../components/Wrapper";
+import Dashboard from "../components/Home/Dashboard";
+import Wrapper from "../components/Home/Wrapper";
 
 export default function Home() {
     return (

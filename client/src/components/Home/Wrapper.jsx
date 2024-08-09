@@ -1,4 +1,4 @@
-import Home from "../pages/Home";
+import Home from "../../pages/Home";
 import Dashboard from "./Dashboard";
 import Navbar from "./Navbar";
 

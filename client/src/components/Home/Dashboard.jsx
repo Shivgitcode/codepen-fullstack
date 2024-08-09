@@ -1,4 +1,4 @@
-import { pens } from "../utils";
+import { pens } from "../../utils";
 import { FaRegBookmark } from "react-icons/fa";
 export default function Dashboard() {
     return (
@@ -20,7 +20,7 @@ export default function Dashboard() {
 
             </div>
 
-            <div className="flex flex-row flex-wrap w-[70%] ml-[70px] justify-between mt-10">
+            <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
                 {pens.map(el => (
                     <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
                         <figure>

@@ -1,5 +1,5 @@
-import SignupPage from "../components/SignupPage";
-import Wrapper from "../components/Wrapper";
+import SignupPage from "../components/Auth/SignupPage";
+import Wrapper from "../components/Home/Wrapper";
 
 export default function Signup() {
     return (
