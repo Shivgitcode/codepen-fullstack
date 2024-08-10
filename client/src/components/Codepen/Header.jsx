@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Header() {
     const [title, setTitle] = useState("")
     return (
-        <div className="flex justify-between items-center py-2 px-5 bg-black">
+        <div className="flex justify-between items-center py-2 px-5 bg-black border-b-[2px] border-gray-700">
             <div className="flex gap-3">
                 <div className="w-[35px]">
                     <img src={logo} alt="" className="" />
