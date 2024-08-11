@@ -1,15 +1,49 @@
 import { IoMdSettings } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import { useState, useCallback } from "react";
 import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { langs } from "@uiw/codemirror-extensions-langs"
 import { vscodeDark } from "@uiw/codemirror-theme-vscode"
+import { useCodeStore } from "../../zustand/codeStore";
+import { useRef } from "react";
+import { useEffect } from "react";
+
 export default function PenCard({ pen }) {
-    const [value, setValue] = React.useState("");
-    const onChange = React.useCallback((val, viewUpdate) => {
-        console.log('val:', val);
-        setValue(val);
-    }, []);
+    let [lang, setLang] = useState([])
+    let value = ""
+    // const [value, setValue] = useState({ html: "", css: "", js: "" });
+    // const inputRef = useRef(null)
+    const { myLangs, handleMyLangs } = useCodeStore((state) => ({
+        myLangs: state.myLangs,
+        handleMyLangs: state.handleMyLangs
+    }))
+
+    useEffect(() => {
+        if (pen.name == "HTML") {
+            setLang(langs.html())
+
+        }
+        else if (pen.name == "CSS") {
+            setLang(langs.css())
+
+        }
+        else {
+            setLang(langs.javascript())
+        }
+        console.log("hello")
+
+    }, [])
+
+
+
+    const onChange = (val) => {
+        console.log(val)
+        handleMyLangs(val, pen.name.toLowerCase())
+
+
+        console.log(myLangs)
+    }
     return (
         <div className="flex flex-col w-full pb-5">
 
@@ -31,8 +65,9 @@ export default function PenCard({ pen }) {
 
 
             <div>
-                <CodeMirror value={value} theme={vscodeDark} height="297px" extensions={[javascript({ jsx: true })]} onChange={onChange} />
+                <CodeMirror value={value} theme={vscodeDark} height="297px" extensions={[lang]} onChange={(value) => onChange(value)} />
             </div>
         </div>
     )
+
 }
