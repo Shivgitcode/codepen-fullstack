@@ -11,8 +11,8 @@ import { useEffect } from "react";
 
 export default function PenCard({ pen }) {
     let [lang, setLang] = useState([])
-    let value = ""
-    // const [value, setValue] = useState({ html: "", css: "", js: "" });
+
+    const [value, setValue] = useState("");
     // const inputRef = useRef(null)
     const { myLangs, handleMyLangs } = useCodeStore((state) => ({
         myLangs: state.myLangs,
@@ -22,6 +22,7 @@ export default function PenCard({ pen }) {
     useEffect(() => {
         if (pen.name == "HTML") {
             setLang(langs.html())
+
 
         }
         else if (pen.name == "CSS") {
@@ -40,6 +41,7 @@ export default function PenCard({ pen }) {
     const onChange = (val) => {
         console.log(val)
         handleMyLangs(val, pen.name.toLowerCase())
+        setValue(val)
 
 
         console.log(myLangs)

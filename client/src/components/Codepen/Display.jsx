@@ -37,7 +37,7 @@ export default function Display() {
 
     return (
         <div>
-            <iframe height={"100%"} width={"100%"} srcDoc={template} sandbox='allow-scripts' title='Output' ></iframe>
+            <iframe className='w-[100%] h-[500px]' srcDoc={template} sandbox='allow-scripts' title='Output' ></iframe>
 
 
         </div>
