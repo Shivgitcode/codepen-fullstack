@@ -8,8 +8,8 @@ export default function NavbarContent() {
     return (
         <div className="flex flex-col py-2 gap-5 mt-3">
             <img src={codepen} alt="" />
-            <button className="btn btn-outline">Start coding</button>
-            <button className="btn btn-ghost text-[20px]"><IoMdHome></IoMdHome>Home</button>
+            <button className="btn btn-outline" onClick={() => { navigate("/codepen") }}>Start coding</button>
+            <button className="btn btn-ghost text-[20px]" onClick={() => navigate("/")}><IoMdHome></IoMdHome>Home</button>
 
             <div className="flex flex-col gap-4 mt-4">
                 <button className="btn btn-primary text-[20px]" onClick={() => navigate('/login')}>Login</button>
