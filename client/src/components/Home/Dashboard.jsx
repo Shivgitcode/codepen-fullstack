@@ -4,7 +4,15 @@ import { FaRegBookmark } from "react-icons/fa";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import { Link } from "react-router-dom";
 export default function Dashboard() {
-    const { isLoggedIn } = useContext(AppContext)
+    const { isLoggedIn, setIsLoggedIn, jwtToken } = useContext(AppContext)
+    console.log(jwtToken)
+    console.log(isLoggedIn)
+    if (jwtToken) {
+        setIsLoggedIn(true)
+    }
+
+    console.log(isLoggedIn)
+
     return (
         <div className="w-full flex flex-col ">
             <div>

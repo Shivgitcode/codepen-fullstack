@@ -1,6 +1,47 @@
+import { useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../AppContext/AppContextProvider";
+import Cookie from "js-cookie"
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+    const [loginDetails, setLoginDetails] = useState({ loginDetails: "", setLoginDetails: "" })
+    const { isLoggedIn, setIsLoggedIn, setJwtToken } = useContext(AppContext)
+    const navigate = useNavigate()
+
+    const handleLogin = (e) => {
+        setLoginDetails((prev) => {
+            return { ...prev, [e.target.name]: e.target.value }
+        })
+        console.log(loginDetails)
+    }
+
+    const submitLogin = async (e) => {
+        const response = await fetch("http://localhost:3000/api/v1/login", {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginDetails)
+
+        })
+        if (response.ok) {
+            const data = await response.json()
+            setJwtToken(Cookie.get("jwt"))
+            navigate("/")
+
+            console.log(data)
+
+        }
+        else {
+            const data = await response.json()
+            console.log(data)
+
+        }
+    }
     return (
         <div className="w-full ml-[30%] mt-[15%]">
             <div className=" bg-[#1e1f26] rounded-lg p-[30px] max-w-[500px] min-h-[300px] flex flex-col items-center gap-5">
@@ -16,7 +57,7 @@ export default function LoginPage() {
                         <path
                             d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
                     </svg>
-                    <input type="text" className="grow" placeholder="Email" />
+                    <input type="text" className="grow" placeholder="Email" name="email" onChange={handleLogin} />
                 </label>
                 <label className="input input-bordered flex items-center gap-2 w-[80%]">
                     <svg
@@ -29,10 +70,10 @@ export default function LoginPage() {
                             d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
                             clipRule="evenodd" />
                     </svg>
-                    <input type="password" className="grow" value="password" />
+                    <input type="password" className="grow" placeholder="password" name="password" onChange={handleLogin} />
                 </label>
                 <p className="w-full text-right pr-12 mt-[-12px]">Don't have an account? <Link to="/signup" className=" text-blue-600">Sign Up</Link></p>
-                <button className="btn btn-outline font-medium text-[20px] mt-6">Login</button>
+                <button className="btn btn-outline font-medium text-[20px] mt-6" onClick={submitLogin}>Login</button>
             </div>
 
         </div>

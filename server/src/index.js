@@ -1,19 +1,26 @@
 const express = require("express")
 const http = require("http")
 const app = express()
-const server = http.createServer(app)
 const dotenv = require("dotenv")
 const { userRouter } = require("../routes/user")
 const { penRouter } = require("../routes/pens")
 const cookieParser = require("cookie-parser")
+const cors = require("cors")
 
 dotenv.config()
 const port = process.env.PORT || 3000
 
+app.use(cors({
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+    origin: "http://localhost:5173"
+}))
+
 app.use(cookieParser())
 app.use(express.json())
-app.use("/api/v1", userRouter)
-app.use("/api/v1", penRouter)
+
+app.use("/api/v1", userRouter, penRouter)
+
 
 
 app.use((err, req, res, next) => {

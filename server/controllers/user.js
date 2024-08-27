@@ -15,12 +15,14 @@ require("dotenv").config()
 const signUp = async (req, res, next) => {
     try {
         const { username, password, email } = req.body
+        console.log(email, username, password)
 
         const findUser = await prisma.user.findFirst({
             where: {
                 email
             }
         })
+        console.log(findUser)
         if (findUser) {
             return next(new AppError(409, "User already exists"))
         }
@@ -106,8 +108,33 @@ const login = async (req, res, next) => {
     }
 }
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+**/
+
+const logout = async (req, res, next) => {
+    try {
+        res.cookie("jwt", "", {
+            maxAge: 1
+        })
+        res.status(200).json({
+            message: "logged out successfully"
+        })
+
+    }
+    catch (err) {
+        next(err)
+
+    }
+
+
+}
+
 
 module.exports = {
     signUp,
-    login
+    login,
+    logout
 }
