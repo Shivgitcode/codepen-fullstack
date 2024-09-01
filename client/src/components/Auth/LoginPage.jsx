@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import Cookie from "js-cookie"
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
     const [loginDetails, setLoginDetails] = useState({ loginDetails: "", setLoginDetails: "" })
@@ -18,7 +19,7 @@ export default function LoginPage() {
     }
 
     const submitLogin = async (e) => {
-        const response = await fetch("http://localhost:3000/api/v1/login", {
+        const response = await fetch("http://localhost:5000/api/v1/login", {
             method: "POST",
             mode: "cors",
             credentials: "include",
@@ -30,6 +31,7 @@ export default function LoginPage() {
         })
         if (response.ok) {
             const data = await response.json()
+            toast.success("Logged In ")
             setJwtToken(Cookie.get("jwt"))
             navigate("/")
 
@@ -38,6 +40,7 @@ export default function LoginPage() {
         }
         else {
             const data = await response.json()
+            toast.error("oops something went wrong")
             console.log(data)
 
         }

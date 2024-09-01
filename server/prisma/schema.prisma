@@ -23,6 +23,7 @@ model User {
 
 model Pen {
   id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  title  String?
   html   String?
   css    String?
   js     String?

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import Cookie from "js-cookie"
+import toast from "react-hot-toast";
 
 export default function NavbarContent() {
     const navigate = useNavigate()
@@ -12,7 +13,7 @@ export default function NavbarContent() {
 
     const handleLogout = async () => {
         console.log("i am working")
-        const response = await fetch("http://localhost:3000/api/v1/logout", {
+        const response = await fetch("http://localhost:5000/api/v1/logout", {
             method: "POST",
             mode: "cors",
             credentials: "include"
@@ -22,6 +23,7 @@ export default function NavbarContent() {
             const data = await response.json()
             navigate("/login")
             setIsLoggedIn(false)
+            toast.success("logged Out successfully")
             console.log(data)
         }
         else {

@@ -13,7 +13,7 @@ export default function SignupPage() {
     }
     const submitForm = async () => {
 
-        const response = await fetch("http://localhost:3000/api/v1/signup", {
+        const response = await fetch("http://localhost:5000/api/v1/signup", {
             method: "POST",
             mode: "cors",
             headers: {

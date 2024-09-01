@@ -8,11 +8,12 @@ require("dotenv").config()
  */
 const createPen = async (req, res, next) => {
     try {
-        const { html, css, js } = req.body
+        const { html, css, js, title } = req.body
         const currUser = req.user
         console.log(currUser)
         const newPen = await prisma.pen.create({
             data: {
+                title,
                 html,
                 css,
                 js,
@@ -40,7 +41,11 @@ const createPen = async (req, res, next) => {
 const getAllPens = async (req, res, next) => {
     try {
         const currUser = req.user
+        console.log("hello", currUser)
         const allPens = await prisma.pen.findMany({
+            include: {
+                user: true
+            },
             where: {
                 userId: currUser.id
 
