@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt")
 const { prisma } = require("../prismaClient")
-const express = require("express")
 const jwt = require("jsonwebtoken")
 const { AppError } = require("../error/AppError")
 const { transportMail } = require("../nodemailer/mail")

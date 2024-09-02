@@ -3,7 +3,6 @@ import { pens } from "../../utils";
 import { FaRegBookmark } from "react-icons/fa";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 export default function Dashboard() {
     const { isLoggedIn, setIsLoggedIn, jwtToken } = useContext(AppContext)
     const [penData, setPenData] = useState([])
@@ -92,21 +91,24 @@ export default function Dashboard() {
             {
                 isLoggedIn ? <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
                     {penData.map(el => (
-                        <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
-                            <figure>
-                                <iframe srcDoc={tempFunc(el.html, el.css, el.js)} sandbox="allow-scripts" title="Output" className="w-full"></iframe>
-                                {/* <img
+                        <Link to={`/codepen/${el.id}`}>
+                            <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
+                                <figure>
+                                    <iframe srcDoc={tempFunc(el.html, el.css, el.js)} sandbox="allow-scripts" title="Output" className="w-full"></iframe>
+                                    {/* <img
                                     src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                                     alt="Shoes" /> */}
-                            </figure>
-                            <div className="card-body">
-                                <h2 className="card-title">{el.title}</h2>
-                                <p>{el.user.username}</p>
-                                <div className="card-actions justify-end">
-                                    <button className="btn btn-ghost"><FaRegBookmark fontSize={22}></FaRegBookmark></button>
+                                </figure>
+                                <div className="card-body">
+                                    <h2 className="card-title">{el.title}</h2>
+                                    <p>{el.user.username}</p>
+                                    <div className="card-actions justify-end">
+                                        <button className="btn btn-ghost"><FaRegBookmark fontSize={22}></FaRegBookmark></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
+
                     ))}
                 </div> : <p className="w-full flex flex-col mt-[20%] ml-[-8%] font-bold text-[32px] items-center ">login to see your saved pens <Link to="/login" className="text-blue-600">Login</Link></p>
             }

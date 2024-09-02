@@ -8,11 +8,15 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode"
 import { useCodeStore } from "../../zustand/codeStore";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-export default function PenCard({ pen }) {
+export default function PenCard({ pen, onePen }) {
+    const params = useParams()
     let [lang, setLang] = useState([])
 
     const [value, setValue] = useState("");
+    console.log(onePen)
+
     // const inputRef = useRef(null)
     const { myLangs, handleMyLangs } = useCodeStore((state) => ({
         myLangs: state.myLangs,
@@ -22,17 +26,40 @@ export default function PenCard({ pen }) {
     useEffect(() => {
         if (pen.name == "HTML") {
             setLang(langs.html())
+            if (params.id) {
+                setValue(onePen.html)
+
+            }
+            else {
+                setValue("")
+            }
+
+
 
 
         }
         else if (pen.name == "CSS") {
             setLang(langs.css())
+            if (params.id) {
+                setValue(onePen.css)
+
+            }
+            else {
+                setValue("")
+            }
 
         }
         else {
             setLang(langs.javascript())
+            if (params.id) {
+                setValue(onePen.js)
+
+            }
+            else {
+                setValue("")
+            }
         }
-        console.log("hello")
+        console.log("hello 1")
 
     }, [])
 

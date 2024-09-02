@@ -17,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path="/codepen" element={<Codepen></Codepen>}></Route>
+        <Route path="/codepen/:id" element={<Codepen></Codepen>}></Route>
       </Routes>
 
 
