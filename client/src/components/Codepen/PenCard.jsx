@@ -1,6 +1,6 @@
 import { IoMdSettings } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useLayoutEffect } from "react";
 import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { langs } from "@uiw/codemirror-extensions-langs"
@@ -10,20 +10,21 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function PenCard({ pen, onePen }) {
+export default function PenCard({ pen }) {
     const params = useParams()
     let [lang, setLang] = useState([])
 
     const [value, setValue] = useState("");
-    console.log(onePen)
 
     // const inputRef = useRef(null)
-    const { myLangs, handleMyLangs } = useCodeStore((state) => ({
+    const { myLangs, handleMyLangs, onePen } = useCodeStore((state) => ({
         myLangs: state.myLangs,
-        handleMyLangs: state.handleMyLangs
+        handleMyLangs: state.handleMyLangs,
+        onePen: state.onePen
     }))
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+
         if (pen.name == "HTML") {
             setLang(langs.html())
             if (params.id) {
@@ -33,10 +34,6 @@ export default function PenCard({ pen, onePen }) {
             else {
                 setValue("")
             }
-
-
-
-
         }
         else if (pen.name == "CSS") {
             setLang(langs.css())
@@ -61,7 +58,7 @@ export default function PenCard({ pen, onePen }) {
         }
         console.log("hello 1")
 
-    }, [])
+    }, [onePen])
 
 
 

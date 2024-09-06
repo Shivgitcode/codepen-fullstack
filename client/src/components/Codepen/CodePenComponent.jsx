@@ -30,9 +30,10 @@ export default function CodePenComponent() {
                 console.log(data)
             }
         }
-        if (params) {
+        if (params.id) {
             fetchOne()
-
+        } else {
+            setMyLangs({ html: "", css: "", js: "" })
         }
     }, [])
     console.log(params)

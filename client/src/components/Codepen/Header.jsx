@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { useContext, useState } from "react";
 import { useStore } from "zustand";
 import { AppContext } from "../../AppContext/AppContextProvider";
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useCodeStore } from "../../zustand/codeStore";
 import toast from "react-hot-toast";
 
@@ -52,7 +52,9 @@ export default function Header() {
         <div className="flex justify-between items-center py-2 px-5 bg-black border-b-[2px] border-gray-700">
             <div className="flex gap-3">
                 <div className="w-[35px]">
-                    <img src={logo} alt="" className="" />
+                    <Link to={"/"}>
+                        <img src={logo} alt="" className="" />
+                    </Link>
                 </div>
                 <div className="flex flex-col items-start">
                     <div className="flex items-end">
