@@ -40,7 +40,7 @@ export default function LoginPage() {
         }
         else {
             const data = await response.json()
-            toast.error("oops something went wrong")
+            toast.error(data.message)
             console.log(data)
 
         }
