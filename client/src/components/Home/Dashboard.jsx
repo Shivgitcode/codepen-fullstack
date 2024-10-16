@@ -2,15 +2,23 @@ import { useContext, useEffect, useState } from "react";
 import { pens } from "../../utils";
 import { FaRegBookmark } from "react-icons/fa";
 import { AppContext } from "../../AppContext/AppContextProvider";
-import { Link } from "react-router-dom";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { Link, useNavigate } from "react-router-dom";
+import { MdDeleteOutline } from "react-icons/md";
+import { GrView } from "react-icons/gr";
+import toast from "react-hot-toast";
 export default function Dashboard() {
     const { isLoggedIn, setIsLoggedIn, jwtToken } = useContext(AppContext)
     const [penData, setPenData] = useState([])
+    const navigate = useNavigate()
     console.log(jwtToken)
     console.log(isLoggedIn)
     if (jwtToken) {
         setIsLoggedIn(true)
     }
+    else (
+        navigate("/login")
+    )
 
     const tempFunc = (html, css, js) => {
         const template = `
@@ -68,6 +76,28 @@ export default function Dashboard() {
     }, [])
 
     console.log(isLoggedIn)
+    const deletePen = async (id) => {
+        console.log("hello", id)
+        setPenData(prev => {
+            return prev.filter(el => el.id != id)
+        })
+        const response = await fetch(`http://localhost:5000/api/v1/codepen/${id}`, {
+            method: "DELETE",
+            mode: "cors",
+            credentials: "include"
+        })
+        if (response.ok) {
+            const data = await response.json();
+            toast.success(data.message)
+        }
+        else {
+            const data = await response.json();
+            toast.error(data.message)
+        }
+
+
+    }
+    console.log(penData)
 
     return (
         <div className="w-full flex flex-col ">
@@ -91,23 +121,34 @@ export default function Dashboard() {
             {
                 isLoggedIn ? <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
                     {penData.map(el => (
-                        <Link to={`/codepen/${el.id}`}>
+                        <>
                             <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
-                                <figure>
-                                    <iframe srcDoc={tempFunc(el.html, el.css, el.js)} sandbox="allow-scripts" title="Output" className="w-full"></iframe>
-                                    {/* <img
+
+                                <>
+                                    <figure>
+                                        <iframe srcDoc={tempFunc(el.html, el.css, el.js)} sandbox="allow-scripts" title="Output" className="w-full"></iframe>
+                                        {/* <img
                                     src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                                     alt="Shoes" /> */}
-                                </figure>
+                                    </figure>
+
+                                </>
+
+
+
                                 <div className="card-body">
                                     <h2 className="card-title">{el.title}</h2>
                                     <p>{el.user.username}</p>
-                                    <div className="card-actions justify-end">
-                                        <button className="btn btn-ghost"><FaRegBookmark fontSize={22}></FaRegBookmark></button>
-                                    </div>
+                                    <details className="dropdown ml-auto">
+                                        <summary className="btn m-1"><BsThreeDotsVertical></BsThreeDotsVertical></summary>
+                                        <ul className="menu dropdown-content bg-base-100 gap-2 rounded-box z-[1] w-52 p-2 shadow">
+                                            <li><button className="btn justify-start gap-3" onClick={() => deletePen(el.id)}><MdDeleteOutline color="red" fontSize={20}></MdDeleteOutline> Delete Pen</button></li>
+                                            <li><button className="btn justify-start gap-3" onClick={() => navigate(`/codepen/${el.id}`)}><GrView color="blue" fontSize={20}></GrView> View Pen</button></li>
+                                        </ul>
+                                    </details>
                                 </div>
                             </div>
-                        </Link>
+                        </>
 
                     ))}
                 </div> : <p className="w-full flex flex-col mt-[20%] ml-[-8%] font-bold text-[32px] items-center ">login to see your saved pens <Link to="/login" className="text-blue-600">Login</Link></p>

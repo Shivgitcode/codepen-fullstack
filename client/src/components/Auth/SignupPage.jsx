@@ -1,4 +1,5 @@
 import { useState } from "react"
+import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
 export default function SignupPage() {
@@ -13,27 +14,32 @@ export default function SignupPage() {
     }
     const submitForm = async () => {
 
-        const response = await fetch("http://localhost:5000/api/v1/signup", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const response = async () => {
+            await fetch("http://localhost:5000/api/v1/signup", {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            credentials: "include",
-            body: JSON.stringify(signupDetails)
+                credentials: "include",
+                body: JSON.stringify(signupDetails)
 
+            })
+            if (response.ok) {
+                const data = await response.json()
+                navigate("/login")
+                return data
+
+                console.log(data)
+            }
+
+        }
+        return toast.promise(response(), {
+            loading: 'Loading...',
+            success: (data) => `${data.data}`,
+            error: (err) => `Error:${err.toString()}`
         })
-        if (response.ok) {
-            const data = await response.json()
-            navigate("/login")
-
-            console.log(data)
-        }
-        else {
-            const data = await response.json()
-            console.log(data)
-        }
     }
     return (
         <div className="w-full ml-[30%] mt-[15%]">

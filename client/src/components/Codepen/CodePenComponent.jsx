@@ -36,7 +36,7 @@ export default function CodePenComponent() {
             setMyLangs({ html: "", css: "", js: "" })
         }
     }, [])
-    console.log(params)
+
     return (
         <div>
             <Header></Header>

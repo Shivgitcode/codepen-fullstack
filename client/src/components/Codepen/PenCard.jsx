@@ -68,8 +68,9 @@ export default function PenCard({ pen }) {
         setValue(val)
 
 
-        console.log(myLangs)
+
     }
+
     return (
         <div className="flex flex-col w-full pb-5">
 
