@@ -135,7 +135,7 @@ const getOnePen = async (req, res, next) => {
 const updateOnePen = async (req, res, next) => {
     try {
         const { id: penId } = req.params
-        const { html, css, js } = req.body
+        const { html, css, js, title } = req.body
 
         const updatedItem = await prisma.pen.update({
             where: {
@@ -144,7 +144,8 @@ const updateOnePen = async (req, res, next) => {
             data: {
                 html,
                 css,
-                js
+                js,
+                title
 
             }
         })

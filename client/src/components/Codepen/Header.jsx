@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { useContext, useState } from "react";
 import { useStore } from "zustand";
 import { AppContext } from "../../AppContext/AppContextProvider";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { useCodeStore } from "../../zustand/codeStore";
 import toast from "react-hot-toast";
 
@@ -17,32 +17,62 @@ export default function Header() {
         myLangs: state.myLangs
     }))
     const navigate = useNavigate()
+    const params = useParams()
+    console.log(params)
+    console.log("dfhlea", isLoggedIn)
 
-    const handleSubmission = async () => {
+    const handleSubmission = async (id) => {
         if (!isLoggedIn) {
             return navigate("/login")
         }
-        const response = await fetch("http://localhost:5000/api/v1/codepen", {
-            method: "POST",
-            mode: "cors",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ ...myLangs, title })
 
-        })
-        if (response.ok) {
-            const data = await response.json()
-            toast.success("Pen saved successfully")
-            navigate("/")
-            console.log(data)
+        if (id) {
+            const response = await fetch(`http://localhost:5000/api/v1/codepen/${id}`, {
+                method: "PATCH",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ...myLangs, title })
+            })
+            if (response.ok) {
+                const data = await response.json()
+                toast.success(data.message);
+                navigate("/")
+
+            }
+            else {
+                const data = await response.json()
+                toast.error(data.message)
+
+            }
         }
         else {
-            const data = await response.json()
-            toast.success("Not saved")
-            console.log(data)
+            const response = await fetch("http://localhost:5000/api/v1/codepen", {
+                method: "POST",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ...myLangs, title })
+
+            })
+            if (response.ok) {
+                const data = await response.json()
+                toast.success("Pen saved successfully")
+                navigate("/")
+                console.log(data)
+            }
+            else {
+                const data = await response.json()
+                toast.success("Not saved")
+                console.log(data)
+            }
+
         }
+
     }
 
 
@@ -67,7 +97,7 @@ export default function Header() {
 
             </div>
             <div className="flex items-center gap-5">
-                <button className="flex items-center py-[10px] px-[12px] bg-[#444857] rounded text-white text-[15px] font-semibold gap-2 cursor-pointer hover:bg-[#696f86] transition-all" onClick={handleSubmission}>
+                <button className="flex items-center py-[10px] px-[12px] bg-[#444857] rounded text-white text-[15px] font-semibold gap-2 cursor-pointer hover:bg-[#696f86] transition-all" onClick={() => handleSubmission(params.id)}>
                     <IoCloud></IoCloud>
                     <span>Save</span>
 
