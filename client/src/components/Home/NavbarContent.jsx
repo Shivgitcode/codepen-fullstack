@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import Cookie from "js-cookie"
 import toast from "react-hot-toast";
+import { CiBookmark } from "react-icons/ci";
 
 export default function NavbarContent() {
     const navigate = useNavigate()
@@ -41,6 +42,7 @@ export default function NavbarContent() {
             <img src={codepen} alt="" />
             <button className="btn btn-outline" onClick={() => { navigate("/codepen") }}>Start coding</button>
             <button className="btn btn-ghost text-[20px]" onClick={() => navigate("/")}><IoMdHome></IoMdHome>Home</button>
+            <button className="btn btn-ghost" onClick={() => navigate("/codepen/saved")}>Bookmark</button>
 
             <div className="flex flex-col gap-4 mt-4">
                 {!isLoggedIn ? <button className="btn btn-primary text-[20px]" onClick={() => navigate('/login')}>Login</button> : <button className="btn btn-primary text-[20px]" onClick={handleLogout}>logout</button>}

@@ -97,6 +97,25 @@ export default function Dashboard() {
 
 
     }
+
+    const bookmarkPen = async (id) => {
+        console.log(id)
+        const response = await fetch(`http://localhost:5000/api/v1/codepen/savepen/${id}`, {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+
+        })
+        if (response.ok) {
+            const res = await response.json()
+            console.log(res)
+        }
+        else {
+            const res = await response.json()
+            console.log(res)
+        }
+
+    }
     console.log(penData)
 
     return (
@@ -144,6 +163,7 @@ export default function Dashboard() {
                                         <ul className="menu dropdown-content bg-base-100 gap-2 rounded-box z-[1] w-52 p-2 shadow">
                                             <li><button className="btn justify-start gap-3" onClick={() => deletePen(el.id)}><MdDeleteOutline color="red" fontSize={20}></MdDeleteOutline> Delete Pen</button></li>
                                             <li><button className="btn justify-start gap-3" onClick={() => navigate(`/codepen/${el.id}`)}><GrView color="blue" fontSize={20}></GrView> View Pen</button></li>
+                                            <li><button className="btn justify-start gap-3" onClick={() => bookmarkPen(el.id)}><FaRegBookmark color="green" fontSize={20}></FaRegBookmark> Bookmark Pen</button></li>
                                         </ul>
                                     </details>
                                 </div>

@@ -22,11 +22,19 @@ model User {
 }
 
 model Pen {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  title  String?
-  html   String?
-  css    String?
-  js     String?
-  user   User?   @relation(references: [id], fields: [userId])
-  userId String? @unique @db.ObjectId
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  title   String?
+  html    String?
+  css     String?
+  js      String?
+  user    User?     @relation(references: [id], fields: [userId])
+  userId  String?   @unique @db.ObjectId
+  savePen savePen[]
+}
+
+model savePen {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  pen    Pen    @relation(references: [id], fields: [penId])
+  penId  String @db.ObjectId
+  userId String @db.ObjectId
 }

@@ -162,11 +162,77 @@ const updateOnePen = async (req, res, next) => {
 }
 
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+const savePen = async (req, res, next) => {
+    try {
+        const { penId } = req.params
+        const currUser = req.user
+        const save = await prisma.savePen.create({
+            data: {
+                penId: penId,
+                userId: currUser.id
+            }
+
+        })
+        return res.status(200).json({
+            message: "pen saved successfully",
+            data: save
+        })
+    } catch (error) {
+        next(error)
+
+    }
+
+}
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+
+const getSavedPens = async (req, res, next) => {
+    try {
+        const currUser = req.user
+        const pendata = await prisma.savePen.findMany({
+            include: {
+                pen: {
+                    include: {
+                        user: true
+                    }
+
+                }
+
+            },
+            where: {
+                userId: currUser.id
+            }
+
+        })
+        return res.status(200).json({
+            message: " all saved pens",
+            data: pendata
+        })
+
+    } catch (error) {
+        next(error)
+
+    }
+}
+
+
+
 
 module.exports = {
     createPen,
     getAllPens,
     deletePen,
     getOnePen,
-    updateOnePen
+    updateOnePen,
+    savePen,
+    getSavedPens
 }
