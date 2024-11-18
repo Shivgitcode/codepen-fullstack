@@ -21,6 +21,10 @@ app.use(express.json())
 
 app.use("/api/v1", userRouter, penRouter)
 
+app.get("/", () => {
+    console.log(hello)
+})
+
 
 
 app.use((err, req, res, next) => {
