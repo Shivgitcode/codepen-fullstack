@@ -14,7 +14,7 @@ export default function NavbarContent() {
 
     const handleLogout = async () => {
         console.log("i am working")
-        const response = await fetch("http://localhost:5000/api/v1/logout", {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/logout`, {
             method: "POST",
             mode: "cors",
             credentials: "include"

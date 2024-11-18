@@ -48,7 +48,7 @@ export default function Dashboard() {
     useEffect(() => {
 
         const fetchData = async () => {
-            const response = await fetch("http://localhost:5000/api/v1/codepen", {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen`, {
                 method: "GET",
                 mode: "cors",
                 headers: {
@@ -81,7 +81,7 @@ export default function Dashboard() {
         setPenData(prev => {
             return prev.filter(el => el.id != id)
         })
-        const response = await fetch(`http://localhost:5000/api/v1/codepen/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen/${id}`, {
             method: "DELETE",
             mode: "cors",
             credentials: "include"
@@ -100,7 +100,7 @@ export default function Dashboard() {
 
     const bookmarkPen = async (id) => {
         console.log(id)
-        const response = await fetch(`http://localhost:5000/api/v1/codepen/savepen/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen/savepen/${id}`, {
             method: "POST",
             mode: "cors",
             credentials: "include",

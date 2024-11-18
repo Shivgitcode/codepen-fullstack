@@ -27,7 +27,7 @@ export default function Header() {
         }
 
         if (id) {
-            const response = await fetch(`http://localhost:5000/api/v1/codepen/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen/${id}`, {
                 method: "PATCH",
                 mode: "cors",
                 credentials: "include",
@@ -49,7 +49,7 @@ export default function Header() {
             }
         }
         else {
-            const response = await fetch("http://localhost:5000/api/v1/codepen", {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen`, {
                 method: "POST",
                 mode: "cors",
                 credentials: "include",

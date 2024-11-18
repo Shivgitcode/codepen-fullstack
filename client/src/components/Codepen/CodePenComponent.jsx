@@ -13,7 +13,7 @@ export default function CodePenComponent() {
     }))
     useEffect(() => {
         const fetchOne = async () => {
-            const response = await fetch(`http://localhost:5000/api/v1/codepen/${params.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/${params.id}`, {
                 method: "POST",
                 mode: "cors",
                 credentials: "include",
