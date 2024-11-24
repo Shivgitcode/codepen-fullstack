@@ -75,7 +75,8 @@ export default function LoginPage() {
                     </svg>
                     <input type="password" className="grow" placeholder="password" name="password" onChange={handleLogin} />
                 </label>
-                <p className="w-full text-right pr-12 mt-[-12px]">Don't have an account? <Link to="/signup" className=" text-blue-600">Sign Up</Link></p>
+                <Link to={"/reset"} className=" w-full pr-12 mt-[-12px] text-right text-blue-600">Forgot Password</Link>
+                <p className="w-full text-center mt-5 ">Don't have an account? <Link to="/signup" className=" text-blue-600">Sign Up</Link></p>
                 <button className="btn btn-outline font-medium text-[20px] mt-6" onClick={submitLogin}>Login</button>
             </div>
 

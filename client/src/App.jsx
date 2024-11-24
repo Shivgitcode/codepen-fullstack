@@ -3,8 +3,9 @@ import Login from "./pages/Login"
 import Home from "./pages/Home"
 import Signup from "./pages/Signup"
 import Codepen from "./pages/Codepen"
-import { Suspense } from "react"
 import Saved from "./pages/Saved"
+import Reset from "./pages/Reset"
+import ChangePassword from "./components/Auth/ChangePassword"
 
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
         <Route path="/codepen" element={<Codepen></Codepen>}></Route>
         <Route path="/codepen/:id" element={<Codepen></Codepen>}></Route>
         <Route path="/codepen/saved" element={<Saved></Saved>}></Route>
+        <Route path="/reset" element={<Reset></Reset>}></Route>
+        <Route path="/changepass" element={<ChangePassword></ChangePassword>}></Route>
       </Routes>
 
 
