@@ -1,6 +1,5 @@
-const jwt = require("jsonwebtoken")
-require("dotenv").config()
-
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 /**
  * @param {import('express').Request} req
@@ -9,23 +8,18 @@ require("dotenv").config()
  */
 
 const protectedRoute = async (req, res, next) => {
-    const token = req.cookies.jwt
-    if (!token) {
-        return res.status(404).json({
-            message: "token not found try login again"
-        })
-    }
-    const user = jwt.verify(token, process.env.JWT_SECRET)
-    if (!token) {
-        return res.status(403).json({
-            message: "first login"
-        })
-    }
-    req.user = user
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(403).json({
+      message: "token not found try login again",
+    });
+  }
+  const user = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = user;
 
-    next()
-}
+  next();
+};
 
 module.exports = {
-    protectedRoute
-}
+  protectedRoute,
+};

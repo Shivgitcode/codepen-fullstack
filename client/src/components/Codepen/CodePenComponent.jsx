@@ -13,7 +13,7 @@ export default function CodePenComponent() {
     }))
     useEffect(() => {
         const fetchOne = async () => {
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/${params.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen/${params.id}`, {
                 method: "POST",
                 mode: "cors",
                 credentials: "include",
@@ -21,6 +21,7 @@ export default function CodePenComponent() {
             })
             if (response.ok) {
                 const data = await response.json()
+                console.log(data)
                 setLang(data.pen.pens[0])
                 setMyLangs(data.pen.pens[0])
                 console.log(data.pen)

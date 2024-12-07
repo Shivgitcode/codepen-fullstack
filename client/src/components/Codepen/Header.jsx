@@ -18,6 +18,25 @@ export default function Header() {
     }))
     const navigate = useNavigate()
     const params = useParams()
+    const template = `
+        <html>
+            <head>
+                <style>
+                    ${myLangs.css}
+                </style>
+            </head>
+            
+            <body>
+                ${myLangs.html}
+
+
+                <script>
+                    ${myLangs.js}
+                </script>
+            </body>
+            
+        </html>
+    `
     console.log(params)
     console.log("dfhlea", isLoggedIn)
 

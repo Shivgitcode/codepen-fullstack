@@ -27,6 +27,7 @@ model Pen {
   html    String?
   css     String?
   js      String?
+  img     String?
   user    User?     @relation(references: [id], fields: [userId])
   userId  String?   @unique @db.ObjectId
   savePen savePen[]
