@@ -19,6 +19,7 @@ app.use(
       "http://localhost:5173",
     ],
     credentials: true,
+    methods: ["POST", "GET", "DELETE", "PATCH", "PUT"],
   })
 );
 app.use(cookieParser());
