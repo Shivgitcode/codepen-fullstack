@@ -8,7 +8,7 @@ export default function AppContextProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [jwtToken, setJwtToken] = useState("");
   const fetchUser = async () => {
-    const response = await fetch("http://localhost:5000/api/v1/check/me", {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/check/me`, {
       method: "GET",
       credentials: "include",
     });
