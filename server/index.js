@@ -14,9 +14,11 @@ app.use(express.json());
 
 app.use(
   cors({
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: [
+      "https://codepen-fullstack-client.vercel.app",
+      "http://localhost:5173",
+    ],
     credentials: true,
-    origin: "https://codepen-fullstack-client.vercel.app",
   })
 );
 app.use(cookieParser());
