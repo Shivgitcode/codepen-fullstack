@@ -63,10 +63,10 @@ const signUp = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    res.json({
-      email,
-      password,
-    });
+    // res.json({
+    //   email,
+    //   password,
+    // });
     // return;
     const findUser = await prisma.user.findFirst({
       where: {
