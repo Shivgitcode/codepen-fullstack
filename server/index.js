@@ -17,7 +17,7 @@ app.use(
   cors({
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-    origin: "https://codepen-fullstack-client.vercel.app",
+    origin: "*",
   })
 );
 
