@@ -10,6 +10,7 @@ const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT || 5000;
 
+app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
@@ -21,7 +22,6 @@ app.use(
     methods: ["POST", "GET", "DELETE", "PATCH", "PUT"],
   })
 );
-app.use(express.json());
 
 app.use("/api/v1", userRouter, penRouter);
 
