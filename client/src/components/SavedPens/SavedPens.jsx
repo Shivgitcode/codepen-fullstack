@@ -35,7 +35,7 @@ export default function SavedPens() {
   useLayoutEffect(() => {
     const fetchSaved = async () => {
       const response = await fetch(
-        "http://localhost:5000/api/v1/codepen/savepen",
+        `${import.meta.env.VITE_BASE_URL}/codepen/savepen`,
         {
           method: "GET",
           mode: "cors",

@@ -21,7 +21,7 @@ export default function LoginPage() {
   };
 
   const submitLogin = async (e) => {
-    const response = await fetch("http://localhost:5000/api/v1/login", {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
       method: "POST",
       mode: "cors",
       credentials: "include",
