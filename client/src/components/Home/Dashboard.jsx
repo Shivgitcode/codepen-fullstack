@@ -45,7 +45,6 @@ export default function Dashboard() {
     const fetchData = async () => {
       const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen`, {
         method: "GET",
-        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -94,7 +93,6 @@ export default function Dashboard() {
       `${import.meta.env.VITE_BASE_URL}/codepen/savepen/${id}`,
       {
         method: "POST",
-        mode: "cors",
         credentials: "include",
       }
     );

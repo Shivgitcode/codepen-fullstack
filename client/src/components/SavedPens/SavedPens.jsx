@@ -38,7 +38,6 @@ export default function SavedPens() {
         `${import.meta.env.VITE_BASE_URL}/codepen/savepen`,
         {
           method: "GET",
-          mode: "cors",
           credentials: "include",
         }
       );

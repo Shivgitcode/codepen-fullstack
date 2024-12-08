@@ -19,7 +19,6 @@ export default function SignupPage() {
     const response = async () => {
       await fetch(`${import.meta.env.VITE_BASE_URL}/signup`, {
         method: "POST",
-        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },

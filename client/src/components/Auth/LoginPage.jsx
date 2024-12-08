@@ -23,7 +23,6 @@ export default function LoginPage() {
   const submitLogin = async (e) => {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
       method: "POST",
-      mode: "cors",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
