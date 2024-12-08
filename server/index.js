@@ -10,6 +10,9 @@ const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT || 5000;
 
+app.use(cookieParser());
+app.use(express.json());
+
 app.use(
   cors({
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
@@ -17,8 +20,6 @@ app.use(
     origin: "https://codepen-fullstack-client.vercel.app",
   })
 );
-app.use(cookieParser());
-app.use(express.json());
 
 app.use("/api/v1", userRouter, penRouter);
 
