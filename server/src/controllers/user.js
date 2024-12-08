@@ -67,17 +67,17 @@ const login = async (req, res, next) => {
       email,
       password,
     });
-    return;
-    // const findUser = await prisma.user.findFirst({
-    //   where: {
-    //     email,
-    //   },
-    // });
-    // if (!findUser) {
-    //   return req.status(404).json({
-    //     message: "user not found",
-    //   });
-    // }
+    // return;
+    const findUser = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (!findUser) {
+      return req.status(404).json({
+        message: "user not found",
+      });
+    }
 
     const verifyPass = await bcrypt.compare(password, findUser.password);
 
