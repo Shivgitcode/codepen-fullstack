@@ -14,6 +14,7 @@ export default function AppContextProvider({ children }) {
     });
     if (response.ok) {
       const res = await response.json();
+      console.log(res.user);
       setJwtToken(res.user);
     } else {
       const res = await response.json();
