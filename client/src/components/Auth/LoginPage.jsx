@@ -10,8 +10,8 @@ export default function LoginPage() {
     loginDetails: "",
     setLoginDetails: "",
   });
-  const { setJwtToken } = useContext(AppContext);
   const navigate = useNavigate();
+  const { setOtpEmail } = useContext(AppContext);
 
   const handleLogin = (e) => {
     setLoginDetails((prev) => {
@@ -31,9 +31,9 @@ export default function LoginPage() {
     });
     if (response.ok) {
       const data = await response.json();
-      toast.success("Logged In ");
-      setJwtToken(data.token);
-      navigate("/");
+      toast.success(data.message);
+      setOtpEmail(data.email);
+      navigate(`/otp`);
 
       console.log(data);
     } else {

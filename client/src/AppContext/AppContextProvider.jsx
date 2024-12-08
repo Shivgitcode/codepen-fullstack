@@ -7,6 +7,7 @@ export const AppContext = createContext();
 export default function AppContextProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [jwtToken, setJwtToken] = useState("");
+  const [otpEmail, setOtpEmail] = useState("");
   const fetchUser = async () => {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/check/me`, {
       method: "GET",
@@ -26,6 +27,8 @@ export default function AppContextProvider({ children }) {
   }, [isLoggedIn]);
   const value = {
     isLoggedIn,
+    otpEmail,
+    setOtpEmail,
     jwtToken,
     setJwtToken,
     setIsLoggedIn,

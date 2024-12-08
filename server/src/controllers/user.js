@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { AppError } = require("../error/AppError");
 const { transportMail } = require("../nodemailer/mail");
 const { mailContent } = require("../nodemailer/mailContent");
+const { generateOtp, verifyOtp } = require("../utils/util");
 require("dotenv").config();
 
 /**
@@ -82,16 +83,33 @@ const login = async (req, res, next) => {
     const verifyPass = await bcrypt.compare(password, findUser.password);
 
     if (verifyPass) {
-      const token = jwt.sign(findUser, process.env.JWT_SECRET);
-      res.cookie("jwt", token, {
-        maxAge: 2 * 60 * 60 * 1000,
-        sameSite: "None",
-        httpOnly: true,
-        secure: true,
+      const { secret, token } = generateOtp();
+
+      await prisma.user.update({
+        where: {
+          id: findUser.id,
+        },
+        data: {
+          otpsecret: secret,
+        },
       });
+
+      await transportMail
+        .sendMail({
+          to: findUser.email,
+          from: "shivneeraj2004@gmail.com",
+          subject: "requested otp",
+          text: `your otp is ${token}`,
+        })
+        .then((data) => {
+          console.log(data.messageId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       res.status(200).json({
-        message: "successfully logged in ",
-        token: findUser,
+        message: "otp sent",
+        email: findUser.email,
       });
     } else {
       res.status(403).json({
@@ -120,6 +138,37 @@ const logout = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ **/
+
+const otpVerification = async (req, res, next) => {
+  const tokenBody = req.body;
+
+  console.log("dkjfallda", tokenBody);
+  const findUser = await prisma.user.findUnique({
+    where: {
+      email: tokenBody.email,
+    },
+  });
+
+  if (!findUser) return res.status(404).json({ message: "user not found" });
+  const isValid = verifyOtp(tokenBody.otp, findUser.otpsecret);
+  if (!isValid) return res.status(401).json({ message: "Invalid otp" });
+  const token = jwt.sign(findUser, process.env.JWT_SECRET);
+  res.cookie("jwt", token, {
+    maxAge: 2 * 60 * 60 * 1000,
+    sameSite: "None",
+    httpOnly: true,
+    secure: true,
+  });
+  res.status(200).json({
+    message: "loggedIn successfully",
+    user: findUser,
+  });
 };
 
 /**
@@ -328,4 +377,5 @@ module.exports = {
   forgotPassword,
   changePassword,
   checkAuth,
+  otpVerification,
 };
