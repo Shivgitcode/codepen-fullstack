@@ -1,12 +1,9 @@
-import { Link } from "react-router-dom";
 import { codepen } from "../../assets";
 import { IoMdHome } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../../AppContext/AppContextProvider";
-import Cookie from "js-cookie";
 import toast from "react-hot-toast";
-import { CiBookmark } from "react-icons/ci";
 
 export default function NavbarContent() {
   const navigate = useNavigate();

@@ -16,17 +16,13 @@ const signUp = async (req, res, next) => {
   try {
     const { username, password, email } = req.body;
     console.log(email, username, password);
-
-    const findUser = await prisma.user.findFirst({
+    const findUser = await prisma.user.findUnique({
       where: {
         email,
       },
     });
-    console.log(findUser);
-    if (findUser) {
-      return next(new AppError(409, "User already exists"));
-    }
-
+    if (findUser)
+      return res.status(409).json({ message: "user already exist" });
     const hashPass = await bcrypt.hash(password, 12);
 
     const createuser = await prisma.user.create({

@@ -17,7 +17,7 @@ export default function SignupPage() {
   };
   const submitForm = async () => {
     const response = async () => {
-      await fetch(`${import.meta.env.VITE_BASE_URL}/signup`, {
+      const raw = await fetch(`${import.meta.env.VITE_BASE_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,15 +26,20 @@ export default function SignupPage() {
         credentials: "include",
         body: JSON.stringify(signupDetails),
       });
-      if (response.ok) {
-        const data = await response.json();
+      if (raw.ok) {
+        const data = await raw.json();
+        console.log(data);
         navigate("/login");
-        return data;
+        return data.message;
+      } else {
+        const data = await raw.json();
+        console.log(data);
+        return data.message;
       }
     };
     return toast.promise(response(), {
       loading: "Loading...",
-      success: (data) => `${data.data}`,
+      success: (data) => `${data}`,
       error: (err) => `Error:${err.toString()}`,
     });
   };
