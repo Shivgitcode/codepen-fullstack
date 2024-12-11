@@ -153,6 +153,7 @@ const otpVerification = async (req, res, next) => {
 
   if (!findUser) return res.status(404).json({ message: "user not found" });
   const isValid = verifyOtp(tokenBody.otp, findUser.otpsecret);
+  console.log(isValid);
   if (!isValid) return res.status(401).json({ message: "Invalid otp" });
   const token = jwt.sign(findUser, process.env.JWT_SECRET);
   res.cookie("jwt", token, {
@@ -366,6 +367,46 @@ const checkAuth = async (req, res, next) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ **/
+const resendOtp = async (req, res, next) => {
+  try {
+    const tokenBody = req.body;
+
+    const { secret, token } = generateOtp();
+
+    await prisma.user.update({
+      where: {
+        email: tokenBody.email,
+      },
+      data: {
+        otpsecret: secret,
+      },
+    });
+    await transportMail
+      .sendMail({
+        to: tokenBody.email,
+        from: "shivneeraj2004@gmail.com",
+        subject: "requested otp",
+        text: `your otp is ${token}`,
+      })
+      .then((data) => {
+        console.log(data.messageId);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    res.status(200).json({
+      message: "otp sent",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signUp,
   login,
@@ -373,5 +414,6 @@ module.exports = {
   forgotPassword,
   changePassword,
   checkAuth,
+  resendOtp,
   otpVerification,
 };

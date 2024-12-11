@@ -7,6 +7,7 @@ const {
   changePassword,
   checkAuth,
   otpVerification,
+  resendOtp,
 } = require("../controllers/user");
 const { protectedRoute } = require("../middleware/middleware");
 const router = express.Router();
@@ -18,5 +19,6 @@ router.post("/logout", logout);
 router.post("/resetpassword", forgotPassword);
 router.post("/changepassword", changePassword);
 router.get("/check/me", protectedRoute, checkAuth);
+router.post("/resend-otp", resendOtp);
 
 module.exports.userRouter = router;

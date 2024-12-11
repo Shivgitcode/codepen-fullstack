@@ -2,36 +2,16 @@ import { useContext, useEffect, useLayoutEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 import { AppContext } from "../../AppContext/AppContextProvider";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Otp() {
   const [otp, setOtp] = useState("");
-  const { setJwtToken, otpEmail } = useContext(AppContext);
+  const { setJwtToken, otpEmail, setOtpEmail } = useContext(AppContext);
   let [timer, setTimer] = useState(30);
   const navigate = useNavigate();
-
-  const resendOtp = async () => {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginDetails),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      toast.success(data.message);
-      setOtpEmail(data.email);
-
-      console.log(data);
-    } else {
-      const data = await response.json();
-      toast.error(data.message);
-      console.log(data);
-    }
-  };
-
+  const { search } = useLocation();
+  const query = new URLSearchParams(search);
+  console.log(query.get("email"));
   const submitOtp = async () => {
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL}/verify-otp`,
@@ -41,7 +21,7 @@ export default function Otp() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ otp, email: otpEmail }),
+        body: JSON.stringify({ otp, email: query.get("email") }),
       }
     );
     if (response.ok) {
@@ -49,12 +29,37 @@ export default function Otp() {
       setJwtToken(res.user);
       toast.success(res.message);
       navigate("/");
-      console.log(res);
     } else {
       const res = await response.json();
       toast.error(res.message);
-      console.log(res);
     }
+  };
+  const resendOtp = () => {
+    const resendingOtp = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/resend-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: query.get("email") }),
+        }
+      );
+      if (response.ok) {
+        const res = await response.json();
+        setTimer(30);
+        return res;
+      } else {
+        const res = await response.json();
+        return res;
+      }
+    };
+    toast.promise(resendingOtp(), {
+      loading: "Getting your otp",
+      success: (data) => `${data.message}`,
+      error: (err) => `Error:${err.toString()}`,
+    });
   };
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -92,11 +97,12 @@ export default function Otp() {
           />
         </label>
         <p>
-          otp expires in {timer} seconds{" "}
-          {timer === 0 && (
-            <span onClick={resendOtp} className=" text-blue-500">
+          {timer === 0 ? (
+            <span onClick={resendOtp} className=" text-blue-500 cursor-pointer">
               resend otp
             </span>
+          ) : (
+            <p>otp expires in {timer} seconds </p>
           )}
         </p>
 

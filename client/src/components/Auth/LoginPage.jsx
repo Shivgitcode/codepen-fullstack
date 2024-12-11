@@ -17,7 +17,7 @@ export default function LoginPage() {
     setLoginDetails((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-    console.log(loginDetails);
+    // console.log(loginDetails);
   };
 
   const submitLogin = async (e) => {
@@ -33,7 +33,7 @@ export default function LoginPage() {
       const data = await response.json();
       toast.success(data.message);
       setOtpEmail(data.email);
-      navigate(`/otp`);
+      navigate(`/otp?email=${data.email}`);
 
       console.log(data);
     } else {
