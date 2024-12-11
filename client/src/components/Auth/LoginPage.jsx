@@ -20,27 +20,32 @@ export default function LoginPage() {
     // console.log(loginDetails);
   };
 
-  const submitLogin = async (e) => {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginDetails),
+  const submitLogin = (e) => {
+    const submitLoginData = async () => {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginDetails),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setOtpEmail(data.email);
+        navigate(`/otp?email=${data.email}`);
+        return data;
+      } else {
+        const data = await response.json();
+        return data;
+        console.log(data);
+      }
+    };
+    toast.promise(submitLoginData(), {
+      loading: "Logging in ",
+      success: (data) => `${data.message}`,
+      error: (err) => `${err.toString()}`,
     });
-    if (response.ok) {
-      const data = await response.json();
-      toast.success(data.message);
-      setOtpEmail(data.email);
-      navigate(`/otp?email=${data.email}`);
-
-      console.log(data);
-    } else {
-      const data = await response.json();
-      toast.error(data.message);
-      console.log(data);
-    }
   };
   return (
     <div className="w-full ml-[30%] mt-[15%]">
