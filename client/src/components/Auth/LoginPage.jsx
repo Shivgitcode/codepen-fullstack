@@ -48,7 +48,7 @@ export default function LoginPage() {
     });
   };
   return (
-    <div className="w-full ml-[30%] mt-[15%]">
+    <div className="w-full ml-[25%] mt-[12%]">
       <div className=" bg-[#1e1f26] rounded-lg p-[30px] max-w-[500px] min-h-[300px] flex flex-col items-center gap-5">
         <h2 className=" font-bold text-[32px]">Login</h2>
         <label className="input input-bordered flex items-center gap-2 w-[80%]">
