@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 export default function NavbarContent() {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setJwtToken } = useContext(AppContext);
+  const { jwtToken, setJwtToken } = useContext(AppContext);
 
   const handleLogout = async () => {
     console.log("i am working");
@@ -19,7 +19,6 @@ export default function NavbarContent() {
     if (response.ok) {
       const data = await response.json();
       navigate("/login");
-      setIsLoggedIn(false);
       setJwtToken("");
       toast.success("logged Out successfully");
       console.log(data);
@@ -29,7 +28,6 @@ export default function NavbarContent() {
     }
   };
 
-  console.log("hello", isLoggedIn);
   return (
     <div className="flex flex-col py-2 gap-5 mt-3">
       <img src={codepen} alt="" />
@@ -55,7 +53,7 @@ export default function NavbarContent() {
       </button>
 
       <div className="flex flex-col gap-4 mt-4">
-        {!isLoggedIn ? (
+        {!jwtToken ? (
           <button
             className="btn btn-primary text-[20px]"
             onClick={() => navigate("/login")}
@@ -70,7 +68,7 @@ export default function NavbarContent() {
             logout
           </button>
         )}
-        {!isLoggedIn && (
+        {!jwtToken && (
           <button
             className="btn btn-success text-[20px]"
             onClick={() => navigate("/signup")}

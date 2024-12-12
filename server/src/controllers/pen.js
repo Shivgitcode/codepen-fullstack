@@ -151,16 +151,15 @@ const savePen = async (req, res, next) => {
   try {
     const { penId } = req.params;
     const currUser = req.user;
-    const checkSavePen = await prisma.savePen.findUnique({
+    const checkSavePen = await prisma.savePen.findFirst({
       where: {
-        id: penId,
+        penId: penId,
       },
     });
-    if (!checkSavePen) {
-      res.status(409).json({
+    if (checkSavePen) {
+      return res.status(409).json({
         message: "pen already saved",
       });
-      return;
     }
     const save = await prisma.savePen.create({
       data: {
@@ -207,9 +206,35 @@ const getSavedPens = async (req, res, next) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+
+const deleteSavedPen = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const deletedPen = await prisma.savePen.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({
+      message: "pen unsaved",
+      data: deletedPen,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createPen,
   getAllPens,
+  deleteSavedPen,
   deletePen,
   getOnePen,
   updateOnePen,

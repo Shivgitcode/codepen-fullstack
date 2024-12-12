@@ -4,6 +4,8 @@ import { AppContext } from "../../AppContext/AppContextProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { GrView } from "react-icons/gr";
+import { MdDeleteOutline } from "react-icons/md";
+import toast from "react-hot-toast";
 
 export default function SavedPens() {
   const [saved, setSaved] = useState([]);
@@ -53,6 +55,24 @@ export default function SavedPens() {
     };
     fetchSaved();
   }, []);
+  const deletePen = async (id) => {
+    setSaved((prev) => prev.filter((el) => el.id !== id));
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/codepen/delete-save-pen/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      const res = await response.json();
+      console.log(res);
+      toast.success(res.message);
+    } else {
+      const res = await response.json();
+      console.log(res);
+      toast.error(res.message);
+    }
+  };
   return (
     <div className="flex mt-[80px] ml-[120px] gap-8 flex-wrap">
       {saved.map((el) => (
@@ -80,7 +100,18 @@ export default function SavedPens() {
                   <BsThreeDotsVertical></BsThreeDotsVertical>
                 </summary>
                 <ul className="menu dropdown-content bg-base-100 gap-2 rounded-box z-[1] w-52 p-2 shadow">
-                  {/* <li><button className="btn justify-start gap-3" onClick={() => deletePen(el.pen)}><MdDeleteOutline color="red" fontSize={20}></MdDeleteOutline> Delete Pen</button></li> */}
+                  <li>
+                    <button
+                      className="btn justify-start gap-3"
+                      onClick={() => deletePen(el.id)}
+                    >
+                      <MdDeleteOutline
+                        color="red"
+                        fontSize={20}
+                      ></MdDeleteOutline>{" "}
+                      Delete Pen
+                    </button>
+                  </li>
                   <li>
                     <button
                       className="btn justify-start gap-3"

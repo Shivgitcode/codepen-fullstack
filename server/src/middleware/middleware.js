@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const protectedRoute = async (req, res, next) => {
   const token = req.cookies.jwt;
+  console.log("hello", token);
   if (!token) {
     return res.status(403).json({
       message: "token not found try login again",
