@@ -1,8 +1,9 @@
-import { codepen } from "../../assets";
+import { codepen, astro } from "../../assets";
 import { IoMdHome } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../../AppContext/AppContextProvider";
+
 import toast from "react-hot-toast";
 
 export default function NavbarContent() {
@@ -30,7 +31,7 @@ export default function NavbarContent() {
 
   return (
     <div className="flex flex-col py-2 gap-5 mt-3">
-      <img src={codepen} alt="" />
+      <img src={astro} alt="" />
       <button
         className="btn btn-outline"
         onClick={() => {
