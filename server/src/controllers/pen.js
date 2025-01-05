@@ -1,6 +1,4 @@
-const jwt = require("jsonwebtoken");
 const { prisma } = require("../prismaClient");
-const puppeteer = require("puppeteer");
 require("dotenv").config();
 /**
  * @param {import('express').Request} req

@@ -6,11 +6,30 @@ const { userRouter } = require("./routes/user");
 const { penRouter } = require("./routes/pens");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const morgan = require("morgan");
+const { logger } = require("./logger/logger");
+const { write } = require("fs");
 
 dotenv.config();
 const port = process.env.PORT || 5000;
+const morgancontent = ":method :url :status :response-time ms";
 
 app.use(express.json());
+app.use(
+  morgan(morgancontent, {
+    stream: {
+      write: (message) => {
+        const loggerObject = {
+          method: message.split(" ")[0],
+          url: message.split(" ")[1],
+          status: message.split(" ")[2],
+          responseTime: message.split(" ")[3],
+        };
+        logger.info(JSON.stringify(loggerObject));
+      },
+    },
+  })
+);
 app.use(
   cors({
     origin: [

@@ -6,9 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdDeleteOutline } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { fetchData } from "../../utils/requests";
 export default function Dashboard() {
   const { isLoggedIn, setIsLoggedIn, jwtToken } = useContext(AppContext);
-  const [penData, setPenData] = useState([]);
+  // const [penData, setPenData] = useState([]);
   const navigate = useNavigate();
   console.log(jwtToken);
   console.log(isLoggedIn);
@@ -40,29 +42,10 @@ export default function Dashboard() {
 
     return template;
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/codepen`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        setPenData(data.data);
-      } else {
-        const data = await response.json();
-
-        console.log(data);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const query = useQuery({
+    queryKey: ["pens"],
+    queryFn: fetchData,
+  });
 
   console.log(isLoggedIn);
   const deletePen = async (id) => {
@@ -106,7 +89,6 @@ export default function Dashboard() {
       console.log(res);
     }
   };
-  console.log(penData);
 
   return (
     <div className="w-full flex flex-col ">
@@ -129,71 +111,76 @@ export default function Dashboard() {
       </div>
 
       {isLoggedIn ? (
-        <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
-          {penData.map((el) => (
-            <>
-              <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
-                <>
-                  <figure>
-                    <iframe
-                      srcDoc={tempFunc(el.html, el.css, el.js)}
-                      sandbox="allow-scripts"
-                      title="Output"
-                      className="w-full"
-                    ></iframe>
-                    {/* <img
+        query.isFetching ? (
+          <h1>loading...</h1>
+        ) : (
+          <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
+            {query.data.data.map((el) => (
+              <>
+                <div className="card card-compact bg-base-100 w-96 shadow-xl mb-5">
+                  <>
+                    <figure>
+                      <iframe
+                        srcDoc={tempFunc(el.html, el.css, el.js)}
+                        sandbox="allow-scripts"
+                        title="Output"
+                        className="w-full"
+                      ></iframe>
+                      {/* <img
                                     src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                                     alt="Shoes" /> */}
-                  </figure>
-                </>
+                    </figure>
+                  </>
 
-                <div className="card-body">
-                  <h2 className="card-title">{el.title}</h2>
-                  <p>{el.user.username}</p>
-                  <details className="dropdown ml-auto">
-                    <summary className="btn m-1">
-                      <BsThreeDotsVertical></BsThreeDotsVertical>
-                    </summary>
-                    <ul className="menu dropdown-content bg-base-100 gap-2 rounded-box z-[1] w-52 p-2 shadow">
-                      <li>
-                        <button
-                          className="btn justify-start gap-3"
-                          onClick={() => deletePen(el.id)}
-                        >
-                          <MdDeleteOutline
-                            color="red"
-                            fontSize={20}
-                          ></MdDeleteOutline>{" "}
-                          Delete Pen
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn justify-start gap-3"
-                          onClick={() => navigate(`/codepen/${el.id}`)}
-                        >
-                          <GrView color="blue" fontSize={20}></GrView> View Pen
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="btn justify-start gap-3"
-                          onClick={() => bookmarkPen(el.id)}
-                        >
-                          <FaRegBookmark
-                            color="green"
-                            fontSize={20}
-                          ></FaRegBookmark>{" "}
-                          Bookmark Pen
-                        </button>
-                      </li>
-                    </ul>
-                  </details>
+                  <div className="card-body">
+                    <h2 className="card-title">{el.title}</h2>
+                    <p>{el.user.username}</p>
+                    <details className="dropdown ml-auto">
+                      <summary className="btn m-1">
+                        <BsThreeDotsVertical></BsThreeDotsVertical>
+                      </summary>
+                      <ul className="menu dropdown-content bg-base-100 gap-2 rounded-box z-[1] w-52 p-2 shadow">
+                        <li>
+                          <button
+                            className="btn justify-start gap-3"
+                            onClick={() => deletePen(el.id)}
+                          >
+                            <MdDeleteOutline
+                              color="red"
+                              fontSize={20}
+                            ></MdDeleteOutline>{" "}
+                            Delete Pen
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            className="btn justify-start gap-3"
+                            onClick={() => navigate(`/codepen/${el.id}`)}
+                          >
+                            <GrView color="blue" fontSize={20}></GrView> View
+                            Pen
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            className="btn justify-start gap-3"
+                            onClick={() => bookmarkPen(el.id)}
+                          >
+                            <FaRegBookmark
+                              color="green"
+                              fontSize={20}
+                            ></FaRegBookmark>{" "}
+                            Bookmark Pen
+                          </button>
+                        </li>
+                      </ul>
+                    </details>
+                  </div>
                 </div>
-              </div>
-            </>
-          ))}
-        </div>
+              </>
+            ))}
+          </div>
+        )
       ) : (
         <p className="w-full flex flex-col mt-[20%] ml-[-8%] font-bold text-[32px] items-center ">
           login to see your saved pens{" "}
