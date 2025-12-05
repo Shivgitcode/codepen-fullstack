@@ -35,6 +35,7 @@ app.use(
     origin: [
       "https://codepen-fullstack-client.vercel.app",
       "http://localhost:5173",
+      "https://astrocode.shivn.tech"
     ],
     credentials: true,
     methods: ["POST", "GET", "DELETE", "PATCH", "PUT"],
