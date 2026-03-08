@@ -13,7 +13,6 @@ export default function SignupPage() {
     setSignupDetails((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-    console.log(signupDetails);
   };
   const submitForm = async () => {
     const response = async () => {

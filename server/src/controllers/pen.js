@@ -37,7 +37,6 @@ const createPen = async (req, res, next) => {
 const getAllPens = async (req, res, next) => {
   try {
     const currUser = req.user;
-    console.log("hello", currUser);
     const allPens = await prisma.pen.findMany({
       include: {
         user: true,

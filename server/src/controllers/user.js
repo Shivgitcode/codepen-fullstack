@@ -60,11 +60,6 @@ const signUp = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    // res.json({
-    //   email,
-    //   password,
-    // });
-    // return;
     const findUser = await prisma.user.findFirst({
       where: {
         email,
@@ -143,8 +138,6 @@ const logout = async (req, res, next) => {
 
 const otpVerification = async (req, res, next) => {
   const tokenBody = req.body;
-
-  console.log("dkjfallda", tokenBody);
   const findUser = await prisma.user.findUnique({
     where: {
       email: tokenBody.email,
@@ -192,7 +185,7 @@ const forgotPassword = async (req, res, next) => {
 
     const token = await jwt.sign(
       { email: passbody.email },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
     );
     await transportMail
       .sendMail({
@@ -386,19 +379,18 @@ const resendOtp = async (req, res, next) => {
         otpsecret: secret,
       },
     });
-    await transportMail
-      .sendMail({
-        to: tokenBody.email,
-        from: "shivneeraj2004@gmail.com",
-        subject: "requested otp",
-        text: `your otp is ${token}`,
-      })
-      .then((data) => {
-        console.log(data.messageId);
-      })
-      .catch((err) => {
-        console.log(err);
+
+    const data = await transportMail.sendMail({
+      to: tokenBody.email,
+      from: "shivneeraj2004@gmail.com",
+      subject: "requested otp",
+      text: `your otp is ${token}`,
+    });
+    if (!data.messageId) {
+      return res.status(500).json({
+        message: data.response,
       });
+    }
     res.status(200).json({
       message: "otp sent",
     });

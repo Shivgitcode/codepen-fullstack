@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import toast from "react-hot-toast";
 import { AppContext } from "../../AppContext/AppContextProvider";
@@ -6,12 +6,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Otp() {
   const [otp, setOtp] = useState("");
-  const { setJwtToken, otpEmail, setOtpEmail } = useContext(AppContext);
-  let [timer, setTimer] = useState(30);
+  const { setJwtToken } = useContext(AppContext);
+  let [timer, setTimer] = useState(2);
   const navigate = useNavigate();
   const { search } = useLocation();
   const query = new URLSearchParams(search);
-  console.log(query.get("email"));
   const submitOtp = async () => {
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL}/verify-otp`,
@@ -22,7 +21,7 @@ export default function Otp() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ otp, email: query.get("email") }),
-      }
+      },
     );
     if (response.ok) {
       const res = await response.json();
@@ -44,11 +43,11 @@ export default function Otp() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email: query.get("email") }),
-        }
+        },
       );
       if (response.ok) {
         const res = await response.json();
-        setTimer(30);
+        setTimer(2);
         return res;
       } else {
         const res = await response.json();
@@ -61,18 +60,7 @@ export default function Otp() {
       error: (err) => `Error:${err.toString()}`,
     });
   };
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTimer((prev) => {
-        return (prev = prev - 1);
-      });
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(intervalId);
-    }, 30000);
-    setTimer(30);
-    return () => clearInterval(intervalId);
-  }, []);
+
   return (
     <div className="w-full ml-[30%] mt-[15%]">
       <div className=" bg-[#1e1f26] rounded-lg p-[30px] max-w-[500px] min-h-[300px] flex flex-col items-center gap-5">
@@ -102,7 +90,7 @@ export default function Otp() {
               resend otp
             </span>
           ) : (
-            <p>otp expires in {timer} seconds </p>
+            <p>otp expires in {timer} minute </p>
           )}
         </p>
 

@@ -3,42 +3,20 @@ import { MdViewSidebar } from "react-icons/md";
 import { logo, profile } from "../../assets";
 import { MdEdit } from "react-icons/md";
 import { useContext, useState } from "react";
-import { useStore } from "zustand";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCodeStore } from "../../zustand/codeStore";
 import toast from "react-hot-toast";
 
-export default function Header() {
+export default function Header({ penName }) {
   const [title, setTitle] = useState("Untitled");
-  const { isLoggedIn } = useContext(AppContext);
+  const { isLoggedIn, jwtToken } = useContext(AppContext);
   const [edit, setEdit] = useState(true);
   const { myLangs } = useCodeStore((state) => ({
     myLangs: state.myLangs,
   }));
   const navigate = useNavigate();
   const params = useParams();
-  const template = `
-        <html>
-            <head>
-                <style>
-                    ${myLangs.css}
-                </style>
-            </head>
-            
-            <body>
-                ${myLangs.html}
-
-
-                <script>
-                    ${myLangs.js}
-                </script>
-            </body>
-            
-        </html>
-    `;
-  console.log(params);
-  console.log("dfhlea", isLoggedIn);
 
   const handleSubmission = async (id) => {
     if (!isLoggedIn) {
@@ -55,7 +33,7 @@ export default function Header() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ ...myLangs, title }),
-        }
+        },
       );
       if (response.ok) {
         const data = await response.json();
@@ -96,25 +74,25 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex flex-col items-start">
-          <div className="flex items-end">
+          <div className="flex items-center justify-start">
             {edit ? (
               <input
                 type="text"
                 disabled
-                value={title}
-                className=" text-[20px] bg-black text-white w-[30%]"
+                value={penName ? penName : title}
+                className=" text-[20px] px-1 py-1 bg-black text-white w-[30%]"
               />
             ) : (
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className=" text-[20px]  text-white w-[30%]"
+                className=" text-[20px] px-1 py-1  text-white w-[30%]"
               ></input>
             )}
             <MdEdit onClick={() => setEdit(!edit)}></MdEdit>
           </div>
-          <p>username</p>
+          <p>{jwtToken.username}</p>
         </div>
       </div>
       <div className="flex items-center gap-5">

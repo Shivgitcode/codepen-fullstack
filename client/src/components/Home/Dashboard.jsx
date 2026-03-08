@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { FaRegBookmark } from "react-icons/fa";
 import { AppContext } from "../../AppContext/AppContextProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -10,10 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../../utils/requests";
 export default function Dashboard() {
   const { isLoggedIn, setIsLoggedIn, jwtToken } = useContext(AppContext);
-  // const [penData, setPenData] = useState([]);
   const navigate = useNavigate();
-  console.log(jwtToken);
-  console.log(isLoggedIn);
   if (jwtToken) {
     setIsLoggedIn(true);
   } else navigate("/login");
@@ -47,19 +44,14 @@ export default function Dashboard() {
     queryFn: fetchData,
   });
 
-  console.log(isLoggedIn);
   const deletePen = async (id) => {
-    console.log("hello", id);
-    setPenData((prev) => {
-      return prev.filter((el) => el.id != id);
-    });
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL}/codepen/${id}`,
       {
         method: "DELETE",
         mode: "cors",
         credentials: "include",
-      }
+      },
     );
     if (response.ok) {
       const data = await response.json();
@@ -77,7 +69,7 @@ export default function Dashboard() {
       {
         method: "POST",
         credentials: "include",
-      }
+      },
     );
     if (response.ok) {
       const res = await response.json();

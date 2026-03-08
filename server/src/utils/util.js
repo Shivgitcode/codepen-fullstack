@@ -5,7 +5,7 @@ const generateOtp = () => {
   const token = speakeasy.totp({
     secret: secret.base32,
     encoding: "base32",
-    step: 30,
+    step: 120,
   });
   return { secret: secret.base32, token };
 };
@@ -16,6 +16,7 @@ const verifyOtp = (otp, secret) => {
     encoding: "base32",
     token: otp,
     window: 1,
+    step: 120,
   });
 };
 

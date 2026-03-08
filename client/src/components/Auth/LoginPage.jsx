@@ -17,10 +17,9 @@ export default function LoginPage() {
     setLoginDetails((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-    // console.log(loginDetails);
   };
 
-  const submitLogin = (e) => {
+  const submitLogin = () => {
     const submitLoginData = async () => {
       const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
         method: "POST",
@@ -38,7 +37,6 @@ export default function LoginPage() {
       } else {
         const data = await response.json();
         return data;
-        console.log(data);
       }
     };
     toast.promise(submitLoginData(), {
