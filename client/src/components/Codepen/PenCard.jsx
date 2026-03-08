@@ -2,7 +2,9 @@ import { IoMdSettings } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState, useLayoutEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import { langs } from "@uiw/codemirror-extensions-langs";
+import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
+import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { useCodeStore } from "../../zustand/codeStore";
 import { useParams } from "react-router-dom";
@@ -21,21 +23,21 @@ export default function PenCard({ pen }) {
 
   useLayoutEffect(() => {
     if (pen.name == "HTML") {
-      setLang(langs.html());
+      setLang(html());
       if (params.id) {
         setValue(onePen.html);
       } else {
         setValue("");
       }
     } else if (pen.name == "CSS") {
-      setLang(langs.css());
+      setLang(css());
       if (params.id) {
         setValue(onePen.css);
       } else {
         setValue("");
       }
     } else {
-      setLang(langs.js());
+      setLang(javascript());
       if (params.id) {
         setValue(onePen.js);
       } else {
