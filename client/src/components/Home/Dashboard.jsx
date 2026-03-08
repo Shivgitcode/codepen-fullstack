@@ -61,9 +61,9 @@ export default function Dashboard() {
       toast.error(data.message);
     }
   };
+  const something = true;
 
   const bookmarkPen = async (id) => {
-    console.log(id);
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL}/codepen/savepen/${id}`,
       {
@@ -74,11 +74,9 @@ export default function Dashboard() {
     if (response.ok) {
       const res = await response.json();
       toast.success(res.message);
-      console.log(res);
     } else {
       const res = await response.json();
       toast.error(res.message);
-      console.log(res);
     }
   };
 
@@ -103,8 +101,10 @@ export default function Dashboard() {
       </div>
 
       {isLoggedIn ? (
-        query.isFetching ? (
-          <h1>loading...</h1>
+        something ? (
+          <div className=" w-full h-screen flex items-center justify-center">
+            <div className="loader relative bottom-32 right-40"></div>
+          </div>
         ) : (
           <div className="flex flex-row flex-wrap w-[70%] ml-[80px] justify-between mt-10">
             {query.data.data.map((el) => (
