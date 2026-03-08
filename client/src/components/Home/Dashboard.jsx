@@ -61,7 +61,6 @@ export default function Dashboard() {
       toast.error(data.message);
     }
   };
-  const something = true;
 
   const bookmarkPen = async (id) => {
     const response = await fetch(
@@ -101,7 +100,7 @@ export default function Dashboard() {
       </div>
 
       {isLoggedIn ? (
-        something ? (
+        query.isFetching ? (
           <div className=" w-full h-screen flex items-center justify-center">
             <div className="loader relative bottom-32 right-40"></div>
           </div>
